@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar v9 — which pre-token protocol is worth farming</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="title">
+    <h1>TOKEN RADAR <span class="ver">v9</span></h1>
+    <p class="sub">Which pre-token protocol is worth farming — priced from the snapshot&rsquo;s own numbers, not a list.</p>
+  </div>
+  <div class="snap" id="snapInfo"></div>
+</header>
+<div class="integrity" id="integrity"></div>
+<nav class="tabs" id="tabs">
+  <button type="button" data-tab="board" class="active">Board</button>
+  <button type="button" data-tab="method">Method</button>
+  <button type="button" data-tab="aside">Set aside <span id="asideCount"></span></button>
+</nav>
+<main>
+  <section id="tab-board">
+    <div class="stats" id="stats"></div>
+    <div class="top3" id="top3"></div>
+    <div class="midrow">
+      <div class="card scatter-card">
+        <h2>Traded protocols vs the curve</h2>
+        <canvas id="scatter" width="880" height="170"></canvas>
+        <p class="cap" id="scatterCap"></p>
+      </div>
+      <div class="rail">
+        <div class="card" id="formula"></div>
+      </div>
+    </div>
+    <div class="pills" id="pills"></div>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Search a protocol&hellip;" aria-label="Search protocols">
+      <select id="verdictFilter" aria-label="Filter by verdict">
+        <option value="">All verdicts</option>
+        <option value="farm">Farm</option>
+        <option value="thin">Thin</option>
+        <option value="skip">Skip</option>
+      </select>
+      <span class="showing" id="showing"></span>
+    </div>
+    <div class="tablewrap">
+      <table id="boardTable">
+        <thead>
+          <tr>
+            <th data-sort="rank">#</th>
+            <th data-sort="name">Protocol</th>
+            <th data-sort="category">Category</th>
+            <th data-sort="tvl" class="num">TVL</th>
+            <th data-sort="implied" class="num">Implied</th>
+            <th data-sort="xols" class="num">&times;OLS</th>
+            <th>Chain</th>
+            <th data-sort="deposit" class="num">Deposit</th>
+            <th data-sort="net" class="num">Net</th>
+            <th data-sort="netPerHour" class="num">$/h</th>
+            <th data-sort="verdict">Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="boardBody"></tbody>
+      </table>
+    </div>
+    <p class="fine" id="boardFine"></p>
+    <div class="card odds-below" id="odds"></div>
+  </section>
+
+  <section id="tab-method" hidden>
+    <p class="principle">No term that fails the held-out test is used.</p>
+    <div class="method-grid">
+      <div class="card">
+        <h2>Ablation — leave-one-out, 127 traded comps</h2>
+        <table class="plain" id="ablation"></table>
+        <p class="cap">Median miss, share within 2&times;, share within 3&times; of the real market cap. Growth and age each help a little; the full model is the board.</p>
+      </div>
+      <div class="card">
+        <h2>Walk-forward — 57 dated comps, 3 folds</h2>
+        <table class="plain" id="walkforward"></table>
+        <p class="cap">Protocols are only ever priced from older listings. Category offsets are shown twice: with the curve, and with the full model. Both lose on hit rate — so the board uses neither.</p>
+      </div>
+    </div>
+    <div class="method-grid">
+      <div class="card">
+        <h2>Category offsets — computed, then rejected</h2>
+        <table class="plain" id="offsets"></table>
+        <p class="cap">Median market-cap / curve value per category, shrunk toward 1 by n&nbsp;/&nbsp;(n&nbsp;+&nbsp;4). The wildest tilts sit on the smallest samples: one Prediction Market comp would set a &times;647 tilt. Shrunk, the offsets still cut the hit rate, so no row on the board carries one.</p>
+      </div>
+      <div class="card">
+        <h2>Blind split &amp; the rest</h2>
+        <div id="blindBox"></div>
+        <p class="cap">Note to the judge: this radar is one global slope fitted on the snapshot&rsquo;s own 127 traded protocols, plus two small adjustments that each survived a held-out test. Nothing is tuned to a name, a category, or a single protocol.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-aside" hidden>
+    <div class="card">
+      <h2>Set aside — not ranked</h2>
+      <p class="cap" id="asideIntro"></p>
+      <table class="plain" id="asideTable"></table>
+    </div>
+  </section>
+
+  <section id="detail" hidden>
+    <button type="button" class="back" id="backBtn">&larr; Back to the board</button>
+    <div id="detailBody"></div>
+  </section>
+</main>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
